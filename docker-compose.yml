@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    # environment:
+    #   - PINECONE_API_KEY=your_pinecone_api_key
+    # depends_on:
+    #   - pinecone
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+
+  # pinecone:
+  #   image: pinecone:latest
+    # environment:
+    #   - PINECONE_API_KEY=your_pinecone_api_key

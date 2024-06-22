@@ -112,3 +112,6 @@ venv.bak/
 *.db
 .db
 blog.db
+
+../.DS_Store
+*.DS_Store

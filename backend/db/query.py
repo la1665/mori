@@ -1,4 +1,4 @@
-from .config import index
+from .main import index
 from .encoder import encode_text
 
 
@@ -10,7 +10,3 @@ def search_database(query, top_k=5):
                           include_metadata=True, include_values=True)
 
     return results
-
-
-if __name__ == "__main__":
-    search_database("black shoes")

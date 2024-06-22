@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic Search</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Semantic Search</h1>
+        <input type="text" id="search-input" placeholder="Enter your search query here">
+        <input type="number" id="top-k-input" placeholder="Enter top_k value">
+        <button onclick="performSearch()">Search</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        async function performSearch() {
+            const query = document.getElementById('search-input').value;
+            const top_k = parseInt(document.getElementById('top-k-input').value) || 10; // Default to 10 if not provided
+
+            const response = await fetch('http://127.0.0.1:8000/search/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: query, top_k: top_k })
+            });
+
+            if (response.ok) {
+                const results = await response.json();
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '';
+
+                if (results.length > 0) {
+                    results.forEach(result => {
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'result-item';
+
+                        const name = document.createElement('h3');
+                        name.innerText = result.metadata.name;
+                        resultItem.appendChild(name);
+
+                        const description = document.createElement('p');
+                        description.innerText = result.metadata.description;
+                        resultItem.appendChild(description);
+
+                        const link = document.createElement('a');
+                        link.href = result.metadata.link;
+                        link.target = '_blank';
+                        link.innerText = 'View Product';
+                        resultItem.appendChild(link);
+
+                        const images = document.createElement('div');
+                        images.className = 'images';
+                        result.metadata.images.forEach(imageUrl => {
+                            const img = document.createElement('img');
+                            img.src = imageUrl;
+                            img.alt = result.metadata.name;
+                            images.appendChild(img);
+                        });
+                        resultItem.appendChild(images);
+
+                        resultsDiv.appendChild(resultItem);
+                    });
+                } else {
+                    resultsDiv.innerText = 'No results found';
+                }
+            } else {
+                console.error('Error:', response.status, response.statusText);
+            }
+        }
+    </script>
+</body>
+</html>

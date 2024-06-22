@@ -19,11 +19,9 @@ def _download(url, download_root):
     return download_target
 
 
-# Replace the original _download function with the overridden one
 clip._download = _download  # type: ignore
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-# device = "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
 
 dataset = os.path.join("./db/products.json")
