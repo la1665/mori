@@ -9,6 +9,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+pyrightconfig.*
 .Python
 build/
 develop-eggs/
